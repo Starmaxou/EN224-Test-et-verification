@@ -5,7 +5,11 @@
 
 int PGCD(int A, int B)
 {
-	assert((A>0) & (B>0));
+	int firstA = A;
+	assert(A>=0);
+	assert(B>=0);
+	assert(A<=65535);
+	assert(B<=65535);
 	while(A != B){
 		if(A == 0) return B;
 		if(B == 0) return A;
@@ -16,6 +20,7 @@ int PGCD(int A, int B)
 		}
 	}
 	assert(A > 0);
+	assert(A <= firstA);
 	return A;
 }
 
