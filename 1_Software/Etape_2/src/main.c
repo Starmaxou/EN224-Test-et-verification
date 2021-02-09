@@ -2,7 +2,6 @@
 #include "stdlib.h"
 #include "math.h"
 #include "time.h"
-#include "assert.h"
 
 #define MAX_RAND 65535
 #define MIN_RAND 0 
