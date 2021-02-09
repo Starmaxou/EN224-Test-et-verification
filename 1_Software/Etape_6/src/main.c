@@ -2,22 +2,20 @@
 #include "stdlib.h"
 #include "math.h"
 #include "assert.h"
+
 #include "pgcd.h"
 
 int main (int argc, char * argv []){
 	printf("(II) Starting PGCD program\n");
 
-	printf("PGCD(1024,800) = %d\n",PGCD(1024,800));
-	printf("PGCD(800,1024) = %d\n",PGCD(800,1024));
-	printf("PGCD(32767,65535) = %d\n",PGCD(32767,65535));
-	printf("PGCD(65535,32767) = %d\n",PGCD(65535,32767));
-	printf("PGCD(512,2048) = %d\n",PGCD(512,2048));
-	printf("PGCD(2048,512) = %d\n",PGCD(2048,512));
-	printf("PGCD(458,6272) = %d\n",PGCD(458,6272));
-	printf("PGCD(6272,458) = %d\n",PGCD(6272,458));
-	printf("PGCD(783,125) = %d\n",PGCD(783,125));
-	printf("PGCD(125,783) = %d\n",PGCD(125,783));
+	assert(PGCD(1024,800)==32);
+	
+	assert(PGCD(32767,65535)==1);
+	
+	assert(PGCD(512,2048)==512);
+	
+	assert(PGCD(458,6272)==2);
 
 	printf("(II) End of PGCD program\n");
-  return 0;
+ 	return 0;
 }

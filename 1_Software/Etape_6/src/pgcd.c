@@ -1,3 +1,6 @@
+#include "assert.h"
+#include "pgcd.h"
+
 int PGCD(int A, int B)
 {
 	assert((A>0) & (B>0));
