@@ -1,5 +1,14 @@
 *.o
+1_Software/Etape_1/bin
+1_Software/Etape_2/bin
+1_Software/Etape_3/bin
+1_Software/Etape_4/bin
+1_Software/Etape_5/bin
+1_Software/Etape_6/bin
+1_Software/Etape_7/bin
+1_Software/Etape_8/bin
 2_Hardware/Etape_1/bin/main
 2_Hardware/Etape_1/bin/main
 2_Hardware/Etape_1/bin/main
 .DS_Store
+*.bin
