@@ -23,13 +23,11 @@ int PGCD(int A, int B)
 
 int RandA(void){
 	int A = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
-	assert((A <= MAX_RAND) & (A >= MIN_RAND));	//check if A is in range
     return A;
 }
 
 int RandB(void){
-	int B = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;;
-	assert((B <= MAX_RAND) & (B >= MIN_RAND));	//check if B is in range
+	int B = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
     return B;
 }
 
