@@ -58,9 +58,9 @@ begin
         elsif ( CLK ' event and CLK ='1') then
             	pr_state <= nx_state ;
         end if;
-    end process maj_etat ;
+    end process maj_etat;
 
-	cal_nx_state : process (pr_state, idata_en)
+	cal_nx_state : process (pr_state, idata_en, value_A, value_B)
     begin
     	case pr_state is
     		when Etat_init =>
@@ -72,11 +72,11 @@ begin
     		when Etat_Check =>
     			if(idata_a = idata_b) then
     				nx_state <= Etat_CalEnd;
-    			elsif(idata_a = "0") then
+    			elsif(idata_a = "00000000000000000000000000000000") then
     				nx_state <= Etat_Az;
-    			elsif(idata_b = "0") then
+    			elsif(idata_b = "00000000000000000000000000000000") then
     				nx_state <= Etat_CalEnd;
-    			elsif ((idata_a /= "0") and (idata_b /= "0")) then
+    			elsif ((idata_a /= "00000000000000000000000000000000") and (idata_b /= "00000000000000000000000000000000")) then
     				nx_state <= Etat_CalStart;
     			else
     				nx_state <= Etat_Check;
@@ -112,7 +112,7 @@ begin
     			odata <= std_logic_vector(to_unsigned(value_A, 32));
     			odata_en <= '1';
     		when others =>
-    			odata <= "0";
+    			odata <= std_logic_vector(to_unsigned(0, 32));
     			odata_en <= '0';
     	end case;
     end process cal_output;
@@ -123,7 +123,7 @@ begin
     		if (pr_state = Etat_CalStart)then
 				if (value_A > value_B) then
 					value_A <= value_A - value_B;
-				else
+				elsif (value_A < value_B) then
 					value_B <= value_B - value_A;		
 				end if;
 			elsif (pr_state = Etat_Check) then
