@@ -1,0 +1,16 @@
+Vivado Simulator 2018.2
+Time resolution is 1 ps
+Note: Lancement du test
+Time: 200 ns  Iteration: 0  Process: /test_bench/stimuli  File: /net/s/malberty/Documents/S7-S8/EN224-Test-et-verification/2_Hardware/Etape_1/vivado/project_EN224.srcs/sources_1/new/test_bench.vhd
+Note: Lancement du test
+Time: 200 ns  Iteration: 0  Process: /test_bench/stimuli  File: /net/s/malberty/Documents/S7-S8/EN224-Test-et-verification/2_Hardware/Etape_1/vivado/project_EN224.srcs/sources_1/new/test_bench.vhd
+Note: fin du test
+Time: 749240 ns  Iteration: 0  Process: /test_bench/stimuli  File: /net/s/malberty/Documents/S7-S8/EN224-Test-et-verification/2_Hardware/Etape_1/vivado/project_EN224.srcs/sources_1/new/test_bench.vhd
+Note: Lancement du test
+Time: 200 ns  Iteration: 0  Process: /test_bench/stimuli  File: /net/s/malberty/Documents/S7-S8/EN224-Test-et-verification/2_Hardware/Etape_1/vivado/project_EN224.srcs/sources_1/new/test_bench.vhd
+Note: fin du test
+Time: 749240 ns  Iteration: 0  Process: /test_bench/stimuli  File: /net/s/malberty/Documents/S7-S8/EN224-Test-et-verification/2_Hardware/Etape_1/vivado/project_EN224.srcs/sources_1/new/test_bench.vhd
+Note: Lancement du test
+Time: 200 ns  Iteration: 0  Process: /test_bench/stimuli  File: /net/s/malberty/Documents/S7-S8/EN224-Test-et-verification/2_Hardware/Etape_1/vivado/project_EN224.srcs/sources_1/new/test_bench.vhd
+Note: fin du test
+Time: 749240 ns  Iteration: 0  Process: /test_bench/stimuli  File: /net/s/malberty/Documents/S7-S8/EN224-Test-et-verification/2_Hardware/Etape_1/vivado/project_EN224.srcs/sources_1/new/test_bench.vhd
