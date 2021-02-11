@@ -69,14 +69,15 @@ begin
     			else
     				nx_state <= Etat_init;
     			end if;
+    			
     		when Etat_Check =>
     			if(idata_a = idata_b) then
     				nx_state <= Etat_CalEnd;
-    			elsif(idata_a = "00000000000000000000000000000000") then
+    			elsif(idata_a = std_logic_vector(to_unsigned(0,32))) then
     				nx_state <= Etat_Az;
-    			elsif(idata_b = "00000000000000000000000000000000") then
+    			elsif(idata_b = std_logic_vector(to_unsigned(0,32))) then
     				nx_state <= Etat_CalEnd;
-    			elsif ((idata_a /= "00000000000000000000000000000000") and (idata_b /= "00000000000000000000000000000000")) then
+    			elsif ((idata_a /= std_logic_vector(to_unsigned(0,32))) and (idata_b /= std_logic_vector(to_unsigned(0,32)))) then
     				nx_state <= Etat_CalStart;
     			else
     				nx_state <= Etat_Check;
@@ -104,7 +105,8 @@ begin
     begin
     	case pr_state is
     		when Etat_Init =>
-    			odata_en <= '0';  			
+    		    odata_en <= '0';
+    			odata <= std_logic_vector(to_unsigned(0,32));  			
     		when Etat_Az =>
     			odata <= std_logic_vector(to_unsigned(value_B, 32));
     			odata_en <= '1';

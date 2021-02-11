@@ -55,7 +55,7 @@ architecture tb of test_bench is
     signal odata    : std_logic_vector (31 downto 0);
     signal odata_en : std_logic;
 
-    constant TbPeriod : time := 1000 ns; -- EDIT Put right period here
+    constant TbPeriod : time := 10 ns; -- EDIT Put right period here
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 
@@ -91,34 +91,53 @@ begin
         wait for 100 ns;
 
         -- EDIT Add stimuli here
-        wait for 10 * TbPeriod;
+        -- Test 1
+        wait for 5 * TbPeriod;
 		idata_a <= std_logic_vector(to_unsigned(12, 32));
-        idata_b <= std_logic_vector(to_unsigned(0, 32));
-        wait for 1 * TbPeriod;
+        idata_b <= std_logic_vector(to_unsigned(1, 32));
         idata_en <= '1';
-        wait for 1 * TbPeriod;
-        idata_en <= '0';
-        wait for 10 * TbPeriod;
+        wait for 10 ns;
+        while odata_en = '0' loop
+            idata_en <= '0';
+            wait for 10 ns;
+        end loop;        
+        ASSERT UNSIGNED(odata) = TO_UNSIGNED( 1, 32) SEVERITY ERROR;
         
-        wait for 10 * TbPeriod;
+        -- Test 2
+        wait for 5 * TbPeriod;
 		idata_a <= std_logic_vector(to_unsigned(150, 32));
         idata_b <= std_logic_vector(to_unsigned(25, 32));
-        wait for 1 * TbPeriod;
         idata_en <= '1';
-        wait for 1 * TbPeriod;
-        idata_en <= '0';
-        wait for 50 * TbPeriod;
+        wait for 10 ns;
+        while odata_en = '0' loop
+            idata_en <= '0';
+            wait for 10 ns;
+        end loop;   
+        ASSERT UNSIGNED(odata) = TO_UNSIGNED( 25, 32) SEVERITY ERROR;
         
-        wait for 10 * TbPeriod;
+        -- Test 3
+        wait for 5 * TbPeriod;
 		idata_a <= std_logic_vector(to_unsigned(896, 32));
         idata_b <= std_logic_vector(to_unsigned(1046, 32));
-        wait for 1 * TbPeriod;
         idata_en <= '1';
-        wait for 1 * TbPeriod;
-        idata_en <= '0';
-        wait for 50 * TbPeriod;
+        wait for 10 ns;
+        while odata_en = '0' loop
+            idata_en <= '0';
+            wait for 10 ns;
+        end loop;   
+        ASSERT UNSIGNED(odata) = TO_UNSIGNED( 6, 32) SEVERITY ERROR;
         
+        idata_a <= std_logic_vector(to_unsigned(23300, 32));
+        idata_b <= std_logic_vector(to_unsigned(63398, 32));
+        idata_en <= '1';
+        wait for 10 ns;
+        while odata_en = '0' loop
+                idata_en <= '0';
+                wait for 10 ns;
+        end loop;
+        ASSERT UNSIGNED(odata) = TO_UNSIGNED( 2, 32) SEVERITY ERROR;
         -- Stop the clock and hence terminate the simulation
+        wait for 5 * TbPeriod;
         TbSimEnded <= '1';
         wait;
     end process;

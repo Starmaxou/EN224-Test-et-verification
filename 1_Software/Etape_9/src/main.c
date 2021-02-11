@@ -1,37 +1,13 @@
 #include "stdio.h"
 #include "stdlib.h"
-#include "stdbool.h"
 #include "math.h"
 #include "time.h"
 #include "assert.h"
 
+#include "pgcd.h"
+
 #define MAX_RAND 65535
 #define MIN_RAND 0 
-
-int PGCD1(int A, int B)
-{
-	while(A != B){
-		if (A==0) return B;
-		if (B==0) return A;
-		if (A > B){
-			A = A - B;
-		} else {
-			B = B - A;
-		}
-	}
-	return A;
-}
-
-int PGCD2(int A, int B){
-	int reste;
-
-	while(B != 0){
-		reste = A % B;
-		A = B;
-		B = reste;
-	}
-	return A;
-}
 
 int RandA(void){
 	int A = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
@@ -46,22 +22,25 @@ int RandB(void){
 }
 
 int main (int argc, char * argv []){
-	int A,B,pgcd_1,pgcd_2, i;
-	bool test = false;
-	srand(time(NULL));
-
+	int A, B, i;
+	if (argc < 2){
+		printf("Entrez un nombre de test\n");
+		return -1;
+	}
+	int nombre = atoi(argv[1]);
 	printf("(II) Starting PGCD program\n");
-
-	printf("i\tA\tB\tPGCD(A,B)\tVerif\n");
-	for(i = 0 ; i < 65536 ; i++){
+	srand(time(NULL));
+	for (i = 0 ; i < nombre ; i++){
 		A = RandA();
 		B = RandB();
-		pgcd_1 = PGCD1(A,B);
-		pgcd_2 = PGCD2(A,B);
-		test = (pgcd_1==pgcd_2)?true:false;
-		printf("%d\t%d\t%d\t%d\t%d\n", i, A, B,PGCD1(A, B), test);
+		printf("-- test %d\n",i);
+		printf("idata_a <= std_logic_vector(to_unsigned(%d, 32));\n",A);
+		printf("idata_b <= std_logic_vector(to_unsigned(%d, 32));\n",B);
+		printf("idata_en <= '1';\nwait for 10 ns;\nwhile odata_en = '0' loop\n\tidata_en <= '0';\n\twait for 10 ns;\nend loop;\n");
+		printf("ASSERT UNSIGNED(odata) = TO_UNSIGNED( %d, 32) SEVERITY ERROR;\n",PGCD(A,B));
+		printf("\n");
 	}
-	
+
 	printf("(II) End of PGCD program\n");
-  	return 0;
+ 	return 0;
 }
