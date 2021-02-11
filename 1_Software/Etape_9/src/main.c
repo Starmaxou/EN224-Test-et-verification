@@ -23,11 +23,14 @@ int RandB(void){
 
 int main (int argc, char * argv []){
 	int A, B, i;
+
 	if (argc < 2){
 		printf("Entrez un nombre de test\n");
 		return -1;
 	}
+
 	int nombre = atoi(argv[1]);
+	
 	printf("(II) Starting PGCD program\n");
 	srand(time(NULL));
 	for (i = 0 ; i < nombre ; i++){
