@@ -213,8 +213,42 @@ int PGCD(int A, int B)
 }
 \end{lstlisting}
          Ces pré-condition vont permettre d'assurer que les valeurs de $A$ et $B$ font partie de la plage des valeurs pour laquelle la fonction est conçue.
+         \todo[inline]{Ajouter limitation des pré-conditions}
+
+         Il faut également noté que les assertions ne servent que pour le développement. Lors de la compilation de la version finale du programme, il faut désactiver les assertions.
+         \todo[inline]{Mettre commande de compilation avec et sans assert}
 
     \subsection{Etape 5}
+        En plus de vérifier si les données fournis à la fonction sont conforme, on va vérifier que le résultat est cohérent.
+        \begin{itemize}
+            \item La valeur de sortie ne peut pas être plus grande qu'une des valeurs d'entrée,
+            \item Si $A \neq 0$ et $B \neq 0$, la valeur à la sortie de la boucle WHILE ne peut pas être également à 0.
+        \end{itemize}
+\begin{lstlisting}[style=CStyle]
+int PGCD(int A, int B)
+{
+	int firstA = A;
+    //pre-condition
+	assert(A>=0);
+	assert(B>=0);
+	assert(A<=65535);
+	assert(B<=65535);
+	while(A != B){
+		if(A == 0) return B;
+		if(B == 0) return A;
+		if (A > B){
+			A = A - B;
+		} else {
+			B = B - A;
+		}
+	}
+    //Post-condition
+	assert(A > 0);
+	assert(A <= firstA);
+	return A;
+}
+\end{lstlisting}
+    \todo[inline]{Ajouter limitation des post-conditions}
         
     \subsection{Etape 6}
     
@@ -222,13 +256,13 @@ int PGCD(int A, int B)
     \subsection{Etape 1}
     \subsection{Etape 2}
     \subsection{Etape 3}
-    
+
 \section{Conclusion} % Conclusion
  \begin{lstlisting}[style=CStyle]
     
 \end{lstlisting}
 
 \newpage %-------Saut de Page---------
-
+\listoftodos
 
 \end{document}
