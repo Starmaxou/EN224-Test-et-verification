@@ -216,7 +216,10 @@ int PGCD(int A, int B)
          \todo[inline]{Ajouter limitation des pré-conditions}
 
          Il faut également noté que les assertions ne servent que pour le développement. Lors de la compilation de la version finale du programme, il faut désactiver les assertions.
-         \todo[inline]{Mettre commande de compilation avec et sans assert}
+\begin{lstlisting}[style=CStyle]
+    gcc mon_prog.c -o mon_prog          //Compilation avec les assertions
+    gcc mon_prog.c -o mon_prog -NDEBUG  //Compilation sans les assertions
+\end{lstlisting}
 
     \subsection{Etape 5}
         En plus de vérifier si les données fournis à la fonction sont conforme, on va vérifier que le résultat est cohérent.
@@ -251,7 +254,7 @@ int PGCD(int A, int B)
     \todo[inline]{Ajouter limitation des post-conditions}
         
     \subsection{Etape 6}
-    
+        Les tests unitaires.
 \section{Hardware}
     \subsection{Etape 1}
     \subsection{Etape 2}
