@@ -13,3 +13,6 @@
 2_Hardware/Etape_1/bin/main
 .DS_Store
 *.bin
+Rapport
+!*.tex
+!*.pdf
