@@ -1,0 +1,181 @@
+\documentclass[a4paper]{article}
+
+% Formatting
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage[titletoc,title]{appendix}
+
+% Math
+% https://www.overleaf.com/learn/latex/Mathematical_expressions
+% https://en.wikibooks.org/wiki/LaTeX/Mathematics
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+
+% Images
+% https://www.overleaf.com/learn/latex/Inserting_Images
+% https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
+\usepackage{graphicx,float,subfigure}
+
+% Tables
+% https://www.overleaf.com/learn/latex/Tables
+% https://en.wikibooks.org/wiki/LaTeX/Tables
+
+% Algorithms
+% https://www.overleaf.com/learn/latex/algorithms
+% https://en.wikibooks.org/wiki/LaTeX/Algorithms
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{algorithmic}
+\usepackage{listings}
+
+% Code syntax highlighting
+% https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted
+\usepackage{minted}
+\usemintedstyle{borland}
+
+% References
+% https://www.overleaf.com/learn/latex/Bibliography_management_in_LaTeX
+% https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C
+}
+
+\newcommand{\microAmp}{\mu A}
+
+% Title content
+\title{EN224 - Test et vérification}
+
+\author{ALBERTY Maxime}
+\date{9 février 2021}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage %-------Saut de Page---------
+
+\section{Introduction}
+
+\section{Software}
+    \subsection{Etape 1}
+        L'implémentation de la fonction PGCD fût une simple traduction de l'algorithme présenté en langage C.
+        \begin{lstlisting}[style=CStyle]
+        int PGCD(int A, int B)
+        {
+        	while(A != B){
+        		if (A > B){
+        			A = A - B;
+        		} else {
+        			B = B - A;
+        		}
+        	}
+        	return A;
+        }
+        \end{lstlisting}
+        
+        Cependant il est important de resté concentré, car même si l'algorithme est trivial, une étourderie est vite arrivé et peut faire perdre du temps inutilement.
+        \\
+        
+        Le test de la fonction est effectué au moyen de couples de valeurs d'on aura préalablement calculé le PGCD. 
+        \begin{lstlisting}[style=CStyle]
+        	printf("PGCD(1024,800) = %d\n",PGCD(1024,800));
+        	printf("PGCD(800,1024) = %d\n",PGCD(800,1024));
+        	printf("PGCD(32767,65535) = %d\n",PGCD(32767,65535));
+        	printf("PGCD(65535,32767) = %d\n",PGCD(65535,32767));
+        	printf("PGCD(512,2048) = %d\n",PGCD(512,2048));
+        	printf("PGCD(2048,512) = %d\n",PGCD(2048,512));
+        	printf("PGCD(458,6272) = %d\n",PGCD(458,6272));
+        	printf("PGCD(6272,458) = %d\n",PGCD(6272,458));
+        	printf("PGCD(783,125) = %d\n",PGCD(783,125));
+        	printf("PGCD(125,783) = %d\n",PGCD(125,783));
+        \end{lstlisting}
+        Il faut ensuite comparé manuellement les résultats aux calculs.
+        
+        
+    \subsection{Etape 2}
+        Afin de pouvoir test plus de valeurs sans avoir à dupliquer les lignes de tests, nous ajoutons une génération aléatoires des valeurs de A et B comprisent entre 0 et 65535.
+        \begin{lstlisting}[style=CStyle]
+        \end{lstlisting}
+        \begin{lstlisting}[style=CStyle]
+        #define MAX_RAND 65535
+        #define MIN_RAND 0 
+        
+        int RandA(void){
+        	int A = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
+            return A;
+        }
+        
+        int RandB(void){
+        	int B = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
+            return B;
+        }
+        \end{lstlisting}
+        En ajoutant une boncle FOR dans le main, on peut ainsi test beaucoup plus de valeurs.
+        \begin{lstlisting}[style=CStyle]
+        	for(int i = 0 ; i < 200000 ; i++){
+        		A = RandA();
+        		B = RandB();
+        		printf("%d\t%d\t%d\t%d\n", i, A, B,PGCD(A, B));
+        	}
+        \end{lstlisting}
+        
+        Avec l'ajout de cette fonctionnalité, j'ai pu remarqué que la fonction PGCD ne prenait pas en compte les cas où $A = 0$ ou $B = 0$.
+        Conformément à l'annexe du sujet, la fonction PGCD devient alors :
+        \begin{lstlisting}[style=CStyle]
+        int PGCD(int A, int B)
+        {
+        	while(A != B){
+        		if (A==0) return B; 
+        		if (B==0) return A;
+        		if (A > B){
+        			A = A - B;
+        		} else {
+        			B = B - A;
+        		}
+        	}
+        	return A;
+        }
+        \end{lstlisting}
+    
+    \subsection{Etape 3}
+    
+    \subsection{}
+    
+\section{Hardware}
+    \subsection{Etape 1}
+    
+\section{Conclusion} % Conclusion
+
+
+\newpage %-------Saut de Page---------
+
+\printbibliography % References
+
+\end{document}
