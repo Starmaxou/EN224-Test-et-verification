@@ -5,18 +5,17 @@
 
 int PGCD(int A, int B)
 {
-	assert(A>0);
-	assert(B>0);
+	assert(A>=0);
+	assert(B>=0);
+	assert(A<=65535);
+	assert(B<=65535);
 	while(A != B){
-		if(A == 0) return B;
-		if(B == 0) return A;
 		if (A > B){
 			A = A - B;
 		} else {
 			B = B - A;
 		}
 	}
-	assert(A > 0);
 	return A;
 }
 
