@@ -26,16 +26,7 @@
 \usepackage{algorithmic}
 \usepackage{listings}
 
-% Code syntax highlighting
-% https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted
-\usepackage{minted}
-\usemintedstyle{borland}
-
-% References
-% https://www.overleaf.com/learn/latex/Bibliography_management_in_LaTeX
-% https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management
-\usepackage{biblatex}
-\addbibresource{references.bib}
+\usepackage[colorinlistoftodos]{todonotes}
 
 \usepackage{xcolor}
 \usepackage{listings}
@@ -86,96 +77,158 @@
 \section{Software}
     \subsection{Etape 1}
         L'implémentation de la fonction PGCD fût une simple traduction de l'algorithme présenté en langage C.
-        \begin{lstlisting}[style=CStyle]
-        int PGCD(int A, int B)
-        {
-        	while(A != B){
-        		if (A > B){
-        			A = A - B;
-        		} else {
-        			B = B - A;
-        		}
-        	}
-        	return A;
-        }
-        \end{lstlisting}
+\begin{lstlisting}[style=CStyle]
+int PGCD(int A, int B)
+{
+	while(A != B){
+		if (A > B){
+			A = A - B;
+		} else {
+			B = B - A;
+		}
+	}
+	return A;
+}
+ \end{lstlisting}
         
         Cependant il est important de resté concentré, car même si l'algorithme est trivial, une étourderie est vite arrivé et peut faire perdre du temps inutilement.
         \\
         
         Le test de la fonction est effectué au moyen de couples de valeurs d'on aura préalablement calculé le PGCD. 
-        \begin{lstlisting}[style=CStyle]
-        	printf("PGCD(1024,800) = %d\n",PGCD(1024,800));
-        	printf("PGCD(800,1024) = %d\n",PGCD(800,1024));
-        	printf("PGCD(32767,65535) = %d\n",PGCD(32767,65535));
-        	printf("PGCD(65535,32767) = %d\n",PGCD(65535,32767));
-        	printf("PGCD(512,2048) = %d\n",PGCD(512,2048));
-        	printf("PGCD(2048,512) = %d\n",PGCD(2048,512));
-        	printf("PGCD(458,6272) = %d\n",PGCD(458,6272));
-        	printf("PGCD(6272,458) = %d\n",PGCD(6272,458));
-        	printf("PGCD(783,125) = %d\n",PGCD(783,125));
-        	printf("PGCD(125,783) = %d\n",PGCD(125,783));
-        \end{lstlisting}
+\begin{lstlisting}[style=CStyle]
+printf("PGCD(1024,800) = %d\n",PGCD(1024,800));
+printf("PGCD(800,1024) = %d\n",PGCD(800,1024));
+printf("PGCD(32767,65535) = %d\n",PGCD(32767,65535));
+printf("PGCD(65535,32767) = %d\n",PGCD(65535,32767));
+printf("PGCD(512,2048) = %d\n",PGCD(512,2048));
+printf("PGCD(2048,512) = %d\n",PGCD(2048,512));
+printf("PGCD(458,6272) = %d\n",PGCD(458,6272));
+printf("PGCD(6272,458) = %d\n",PGCD(6272,458));
+printf("PGCD(783,125) = %d\n",PGCD(783,125));
+printf("PGCD(125,783) = %d\n",PGCD(125,783));
+\end{lstlisting}
         Il faut ensuite comparé manuellement les résultats aux calculs.
         
         
     \subsection{Etape 2}
         Afin de pouvoir test plus de valeurs sans avoir à dupliquer les lignes de tests, nous ajoutons une génération aléatoires des valeurs de A et B comprisent entre 0 et 65535.
-        \begin{lstlisting}[style=CStyle]
-        \end{lstlisting}
-        \begin{lstlisting}[style=CStyle]
-        #define MAX_RAND 65535
-        #define MIN_RAND 0 
         
-        int RandA(void){
-        	int A = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
-            return A;
-        }
-        
-        int RandB(void){
-        	int B = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
-            return B;
-        }
-        \end{lstlisting}
+\begin{lstlisting}[style=CStyle]
+#define MAX_RAND 65535
+#define MIN_RAND 0 
+
+int RandA(void){
+	int A = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
+    return A;
+}
+
+int RandB(void){
+	int B = (rand() % (MAX_RAND + 1 - MIN_RAND)) + MIN_RAND;
+    return B;
+}
+\end{lstlisting}
         En ajoutant une boncle FOR dans le main, on peut ainsi test beaucoup plus de valeurs.
-        \begin{lstlisting}[style=CStyle]
-        	for(int i = 0 ; i < 200000 ; i++){
-        		A = RandA();
-        		B = RandB();
-        		printf("%d\t%d\t%d\t%d\n", i, A, B,PGCD(A, B));
-        	}
-        \end{lstlisting}
+\begin{lstlisting}[style=CStyle]
+for(int i = 0 ; i < 200000 ; i++){
+	A = RandA();
+	B = RandB();
+	printf("%d\t%d\t%d\t%d\n", i, A, B,PGCD(A, B));
+}
+\end{lstlisting}
         
+        \newpage
         Avec l'ajout de cette fonctionnalité, j'ai pu remarqué que la fonction PGCD ne prenait pas en compte les cas où $A = 0$ ou $B = 0$.
         Conformément à l'annexe du sujet, la fonction PGCD devient alors :
-        \begin{lstlisting}[style=CStyle]
-        int PGCD(int A, int B)
-        {
-        	while(A != B){
-        		if (A==0) return B; 
-        		if (B==0) return A;
-        		if (A > B){
-        			A = A - B;
-        		} else {
-        			B = B - A;
-        		}
-        	}
-        	return A;
-        }
-        \end{lstlisting}
+\begin{lstlisting}[style=CStyle]
+int PGCD(int A, int B)
+{
+	while(A != B){
+		if (A==0) return B; 
+		if (B==0) return A;
+		if (A > B){
+			A = A - B;
+		} else {
+			B = B - A;
+		}
+	}
+	return A;
+}
+\end{lstlisting}
+        La vérification des résultats de la fonction PGCD est possible mais beaucoup trop long car il est nécessaire de comparer manuellement les résultats avec les calculs préalablement effectués.
     
     \subsection{Etape 3}
-    
-    \subsection{}
+        Afin de tester plus de couple d'entrée, il peut être interressant de comparer ma fonction PGCD avec une autre déjà éprouver.
+        La nouvelle approche est la suivante :
+        \begin{itemize}
+            \item Assignez à $N_1$ la valeur de $N_2$ et à $N_2$ la valeur du reste de la division de $N_1$ par $N_2$;
+            \item Recommencez jusqu'à ce que le reste de la division soit nul;
+            \item A ce moment, $N_1$ contient alors le PGCD de $N_1$ et $N_2$.
+        \end{itemize}
+        
+        Cette approche correspond à cette fonction C :
+\begin{lstlisting}[style=CStyle]
+int PGCD2(int A, int B){
+	int reste;
+
+	while(B != 0){
+		reste = A % B;
+		A = B;
+		B = reste;
+	}
+	return A;
+}
+\end{lstlisting}
+        En modifiant la boucle de l'étape 2, il est possible de tester plus de valeur en comparent le résultat des fonctions PGCD1 et PGCD2.
+\begin{lstlisting}[style=CStyle]
+for(i = 0 ; i < 65536 ; i++){
+	A = RandA();
+	B = RandB();
+	pgcd_1 = PGCD1(A,B);
+	pgcd_2 = PGCD2(A,B);
+	test = (pgcd_1==pgcd_2)?true:false;
+	printf("%d\t%d\t%d\t%d\t%d\n", i, A, B,PGCD1(A, B), test);
+}
+\end{lstlisting}
+        Cette méthode nous permet de comparer les résultats de deux fonction effectuant la même opération mais avec des approches différentes. Seulement si les deux fonctions ont des résultats identiquement faux pour des couples de valeurs, le test sera positif au lieu d'indiquer une erreur de calcul.
+    \newpage
+    \subsection{Etape 4}
+        La vérification des résultats peut commencer en assurant une cohérence entre les valeurs d'entrée et de sortie de la fonction PGCD. Cela est réalisé par des assertions.
+ \begin{lstlisting}[style=CStyle]
+int PGCD(int A, int B)
+{
+    //Pre-condition
+	assert(A>=0);
+	assert(B>=0);
+	assert(A<=65535);
+	assert(B<=65535);
+	
+	while(A != B){
+		if (A > B){
+			A = A - B;
+		} else {
+			B = B - A;
+		}
+	}
+	return A;
+}
+\end{lstlisting}
+         Ces pré-condition vont permettre d'assurer que les valeurs de $A$ et $B$ font partie de la plage des valeurs pour laquelle la fonction est conçue.
+
+    \subsection{Etape 5}
+        
+    \subsection{Etape 6}
     
 \section{Hardware}
     \subsection{Etape 1}
+    \subsection{Etape 2}
+    \subsection{Etape 3}
     
 \section{Conclusion} % Conclusion
-
+ \begin{lstlisting}[style=CStyle]
+    
+\end{lstlisting}
 
 \newpage %-------Saut de Page---------
 
-\printbibliography % References
 
 \end{document}
