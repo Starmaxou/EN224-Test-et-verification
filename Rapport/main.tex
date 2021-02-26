@@ -428,7 +428,20 @@ PORT (
 );
 END PGCD;  
 \end{lstlisting}
-\todo[inline]{mettre image machine etat}
+        Le module VHDL fonctionnement grâce à une machine à état.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{Pictures/FSM_PGCD.png}
+    \caption{Machine etat module PGCD}
+    \label{fig:FSM_PGCD}
+\end{figure}
+        La description de cette machine nécéssite 4 process:
+        \begin{itemize}
+            \item Mise à jour synchrone de l'état
+            \item Calcul de nouvelle état en fonction des entrées
+            \item Calcul des sorties en fonction de l'état en cours
+            \item Cacule du PGCD
+        \end{itemize}
     \subsection{Etape 2}
     \subsection{Etape 3}
 
