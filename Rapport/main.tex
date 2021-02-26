@@ -415,7 +415,7 @@ TEST_CASE ( "Fonctionnement autre", "[PGCD]"){
 
         Cepandant, si une erreur ce produit dans une section, cette dernière est abandonée pour passé à la suivante.
         Si d'autre erreurs sont présentes sur d'autre cas de la section, elles ne seront pas visible. Nous n'obtenons pas un rapport total des tests.
-        
+
 \section{Hardware}
     \subsection{Etape 1}
         De même que pour l'étape 1 de la partie sotfware, il faut décrire un module VHDL permetant d'implanter le calcul du PGCD de deux nombres.
@@ -450,16 +450,9 @@ END PGCD;
             \item Calcul des sorties en fonction de l'état en cours
             \item Cacule du PGCD
         \end{itemize}
-\begin{lstlisting}[style=VHDL]
-    maj_etat : process ( CLK , RESET )
-    begin
-        if (RESET ='1') then
-            pr_state <= Etat_init ;
-        elsif ( CLK ' event and CLK ='1') then
-            	pr_state <= nx_state ;
-        end if;
-    end process maj_etat;
-\end{lstlisting}
+        
+        Après avoir décrit le module il faut créer un testbench afin de tester le fonctionnement du module.
+        
     \subsection{Etape 2}
     \subsection{Etape 3}
 
