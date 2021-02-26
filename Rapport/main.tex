@@ -398,11 +398,20 @@ TEST_CASE ( "Fonctionnement autre", "[PGCD]"){
 }    
 \end{lstlisting}        
         Dans le cas où des erreurs sont détéctées, l'affichage est le suivant :
-        
-        \todo[inline]{Mettre image Test failed}
+        \begin{figure}
+            \centering
+            \includegraphics[width=15cm]{Pictures/test_failed.jpg}
+            \caption{Exemple d'affichage en cas de test échoué}
+            \label{fig:Test_failed}
+        \end{figure}
 
         Dans le cas contraire, on retrouvera l'affichage suivant:
-        \todo[inline]{Mettre image Test sucess}
+        \begin{figure}
+            \centering
+            \includegraphics[width=15cm]{Pictures/test_passed.jpg}
+            \caption{Exemple d'affichage en cas de test réussi}
+            \label{fig:Test_success}
+        \end{figure}
 
         Cepandant, si une erreur ce produit dans une section, cette dernière est abandonée pour passé à la suivante.
         Si d'autre erreurs sont présentes sur d'autre cas de la section, elles ne seront pas visible. Nous n'obtenons pas un rapport total des tests.
