@@ -23,17 +23,21 @@ TEST_CASE ( "Fonctionnement normal", "[PGCD]"){
 	}
 }
 
-TEST_CASE ( "Fonctionnement anormal", "[PGCD]"){
-	SECTION("A = 0"){
-		REQUIRE( PGCD(0,570) == 570 );
-		REQUIRE( PGCD(0,1248) == 1248 );
-		REQUIRE( PGCD(0,570) == 570 );
+TEST_CASE ( "Fonctionnement particulié", "[PGCD]"){
+	SECTION("A > B"){
+		REQUIRE( PGCD(65535,570) == 15 );
+		REQUIRE( PGCD(1248,0) == 1248 );
+		REQUIRE( PGCD(570,0) == 570 );
+		REQUIRE( PGCD(42,0) == 42 );
+	}
+	SECTION("A < B"){
+		REQUIRE( PGCD(42,65535) == 3 );
+		REQUIRE( PGCD(1,65535) == 1 );
+		REQUIRE( PGCD(0,480) == 480 );
 		REQUIRE( PGCD(0,42) == 42 );
 	}
-	SECTION("B = 0"){
-		REQUIRE( PGCD(6580,0) == 6580 );
-		REQUIRE( PGCD(12,0) == 12 );
-		REQUIRE( PGCD(1,0) == 1 );
-		REQUIRE( PGCD(65000,0) == 65000 );
+	SECTION("A = B"){
+		REQUIRE( PGCD(65535,65535) == 65535 );
+		REQUIRE( PGCD(0,0) == 0 );
 	}
 }

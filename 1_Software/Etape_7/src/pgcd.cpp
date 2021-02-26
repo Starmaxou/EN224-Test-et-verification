@@ -13,6 +13,6 @@ int PGCD(int A, int B)
 			B = B - A;
 		}
 	}
-	assert(A > 0);
+	assert(A >= 0);
 	return A;
 }
