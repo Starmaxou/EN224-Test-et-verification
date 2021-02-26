@@ -62,12 +62,13 @@
 \lstdefinelanguage{VHDL}{
    morekeywords=[1]{
      library,use,all,entity,is,port,in,out,end,architecture,of,
-     begin,and, process, if, else, elsif, PROCESS, LIBRARY, USE, ALL, ENTITY, IS, PORT, IN, OUT, END, ARCHITECTURE, OF, BEGIN, AND
+     begin,and, process, if, else, elsif, PROCESS, LIBRARY, USE, ALL, ENTITY, 
+     IS, PORT, IN, OUT, END, ARCHITECTURE, OF, BEGIN, AND, ASSERT, wait, while, SEVERITY
    },
    morekeywords=[2]{
      STD_LOGIC_VECTOR,STD_LOGIC,IEEE,STD_LOGIC_1164,
      NUMERIC_STD,STD_LOGIC_ARITH,STD_LOGIC_UNSIGNED,std_logic_vector,
-     std_logic, downto, DOWNTO
+     std_logic, downto, DOWNTO, UNSIGNED, TO_UNSIGNED, to_unsigned, ERROR
    },
    morecomment=[l]--
 }
@@ -245,10 +246,14 @@ int PGCD(int A, int B)
 	return A;
 }
 \end{lstlisting}
-         Ces pré-condition vont permettre d'assurer que les valeurs de $A$ et $B$ font partie de la plage des valeurs pour laquelle la fonction est conçue.
-         \todo[inline]{Ajouter limitation des pré-conditions}
+         Ces assertions vont permettre d'assurer que les valeurs de $A$ et $B$ font partie de la plage des valeurs pour laquelle la fonction est conçue.
+         
+         Les pré-conditions ont pour objectif de détecter au plus tôt les erreurs, 
+         afin d’alerter le concepteur en stoppant l’exécution du programme. 
+         Elles n'empêche pas l'erreur de ce produire mais permettent d'éviter le déroulement 
+         du programme dans des conditions connues comme mauvaise.
 
-         Il faut également noté que les assertions ne servent que pour le développement. Lors de la compilation de la version finale du programme, il faut désactiver les assertions.
+         On notera également que les assertions ne servent que pour le développement. Lors de la compilation de la version finale du programme, il faut désactiver les assertions.
 \begin{lstlisting}[style=CStyle]
     gcc mon_prog.c -o mon_prog          //Compilation avec les assertions
     gcc mon_prog.c -o mon_prog -NDEBUG  //Compilation sans les assertions
@@ -284,8 +289,10 @@ int PGCD(int A, int B)
 	return A;
 }
 \end{lstlisting}
-    \todo[inline]{Ajouter limitation des post-conditions}
-        
+
+        Les post-condition fonctionnement de la même manière que les pré-conditions.
+        Elles permettent de vérifier que le résultat de la fonction est mathatiquement cohérent avec ses entrées.
+        Elles ne permettant pas de valider le fonctionnement de la fonction mais de détécter des cas d'erreurs connus.
     \subsection{Etape 6}
        Dans cette partie, nous séparons la fonction PGCD dans un fichier spécifique.
        Le nouveau fichier PGCD.c contient donc le code suivant :
@@ -452,9 +459,56 @@ END PGCD;
         \end{itemize}
         
         Après avoir décrit le module il faut créer un testbench afin de tester le fonctionnement du module.
+        Il existe des outils permettant de décrire automatiquement le squelette d'un testbench pour un module VHDL.
+        Une fois ce squelette décrit, il ne reste plus qu'a créer les stimulis pour le module à tester.
 
     \subsection{Etape 2}
+        De la même manière que pour la partie software, il est possible d'utiliser des assertions afin de vérifier le fonctionnement du module.
+        Ces assertions seront écrite dans le fichier testbench.
     \subsection{Etape 3}
+        Afin d'automatiser l'écriture des valeurs de test, il est possible de modifier nos précédents fichiers C pour générer des valeurs de test calculées avec notre fichier PGCD.c.
+\begin{lstlisting}[style=CStyle]
+int main (int argc, char * argv []){
+    int A, B, i;
+
+    if (argc < 2){
+        printf("Entrez un nombre de test\n");
+        return -1;
+    }
+
+    int nombre = atoi(argv[1]);
+
+    srand(time(NULL));
+    for (i = 0 ; i < nombre ; i++){
+        A = RandA();
+        B = RandB();
+        printf("-- test %d\n",i);
+        printf("wait for 5 * TbPeriod;\n");
+        printf("idata_a <= std_logic_vector(to_unsigned(%d, 32));\n",A);
+        printf("idata_b <= std_logic_vector(to_unsigned(%d, 32));\n",B);
+        printf("idata_en <= '1';\nwait for 10 ns;\nwhile odata_en = '0' loop\n\tidata_en <= '0';\n\twait for 10 ns;\nend loop;\n");
+        printf("ASSERT UNSIGNED(odata) = TO_UNSIGNED( %d, 32) SEVERITY ERROR;\n",PGCD(A,B));
+        printf("\n");
+    }
+        return 0;
+}
+\end{lstlisting}
+        Ce code permet donc de générer du code à copier dans le fichier testbench.
+\begin{lstlisting}[style=VHDL]
+-- test 0
+wait for 5 * TbPeriod;
+idata_a <= std_logic_vector(to_unsigned(52079, 32));
+idata_b <= std_logic_vector(to_unsigned(45917, 32));
+idata_en <= '1';
+wait for 10 ns;
+while odata_en = '0' loop
+    idata_en <= '0';
+    wait for 10 ns;
+end loop;
+ASSERT UNSIGNED(odata) = TO_UNSIGNED( 1, 32) SEVERITY ERROR;
+\end{lstlisting}
+        Avec cette méthode, on peut générer autant de test que l'on souhaite et donc gagner énormement de temps.
+        Cependant, pour utiliser cette méthode il faut être sûre du bon fonctionnement de la fonction réalisant les pgcds des couples de tests.
 
 \section{Conclusion} % Conclusion
 Tout le code du TP est disponible dans mon repository GIT https://github.com/Starmaxou/EN224-Test-et-verification
