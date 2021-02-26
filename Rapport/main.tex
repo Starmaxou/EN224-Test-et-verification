@@ -56,8 +56,6 @@
     language=C
 }
 
-\newcommand{\microAmp}{\mu A}
-
 % Title content
 \title{EN224 - Test et vérification}
 
@@ -254,7 +252,125 @@ int PGCD(int A, int B)
     \todo[inline]{Ajouter limitation des post-conditions}
         
     \subsection{Etape 6}
-        Les tests unitaires.
+       Dans cette partie, nous séparons la fonction PGCD dans un fichier spécifique.
+       Le nouveau fichier PGCD.c contient donc le code suivant :
+\begin{lstlisting}[style=CStyle]
+#include "assert.h"
+#include "pgcd.h"
+
+int PGCD(int A, int B)
+{
+    assert((A>=0) & (B>=0));
+    while(A != B){
+        if(A == 0) return B;
+        if(B == 0) return A;
+        if (A > B){
+            A = A - B;
+        } else {
+            B = B - A;
+        }
+    }
+    assert(A > 0);
+    return A;
+}    
+\end{lstlisting}
+
+        Afin d'utiliser notre fonction dans le fichier main.c, il faut créer un fichier PGCD.h.
+\begin{lstlisting}[style=CStyle]
+#ifndef _PGCD_H
+#define _PGCD_H 
+
+int PGCD(int A, int B);
+
+#endif   
+\end{lstlisting}
+
+        Le fichier main.c est alors comme suit:
+\begin{lstlisting}[style=CStyle]
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+#include "assert.h"
+
+#include "pgcd.h"
+
+int main (int argc, char * argv []){
+    printf("(II) Starting PGCD program\n");
+
+    assert(PGCD(1024,800)==32);
+    
+    assert(PGCD(32767,65535)==1);
+    
+    assert(PGCD(512,2048)==512);
+    
+    assert(PGCD(458,6272)==2);
+
+    printf("(II) End of PGCD program\n");
+    return 0;
+}
+\end{lstlisting}
+
+        Les tests unitaires permettent de vérifié le fonctionnement d'une fonctionnalité pendant sont développement. 
+        Ainsi on vérifie si les modifications que l'on apporte nous pas créer de bug.
+        On parlera alors de test de non-régression.
+\newpage
+    \subsection{Etape 7}
+        Il existe de framework permettant de simplifer la rédaction des procédure de test et l'analyse des résultats.
+        Dans cette exercice, le framework Catch2 va permettre d'exprimer des séquences de tests.
+\begin{lstlisting}[style=CStyle]
+#include "pgcd.hpp"
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+
+TEST_CASE ( "Fonctionnement normal", "[PGCD]"){
+    SECTION("A > B"){
+        REQUIRE( PGCD(1250,570) == 10 );
+        REQUIRE( PGCD(5615,1248) == 1 );
+        REQUIRE( PGCD(247,570) == 19 );
+        REQUIRE( PGCD(14796,570) == 6 );
+    }
+    SECTION("A < B"){
+        REQUIRE( PGCD(6580,9896) == 4 );
+        REQUIRE( PGCD(1250,3245) == 5 );
+        REQUIRE( PGCD(1250,2000) == 250 );
+        REQUIRE( PGCD(1250,1251) == 1 );
+    }
+        SECTION("A = B"){
+        REQUIRE( PGCD(25,25) == 25 );
+        REQUIRE( PGCD(1250,1250) == 1250 );
+        REQUIRE( PGCD(100,100) == 100 );
+        REQUIRE( PGCD(8000,8000) == 8000 );
+    }
+}
+
+TEST_CASE ( "Fonctionnement autre", "[PGCD]"){
+    SECTION("A > B"){
+        REQUIRE( PGCD(65535,570) == 15 );
+        REQUIRE( PGCD(1248,0) == 1248 );
+        REQUIRE( PGCD(570,0) == 570 );
+        REQUIRE( PGCD(42,0) == 42 );
+    }
+    SECTION("A < B"){
+        REQUIRE( PGCD(42,65535) == 3 );
+        REQUIRE( PGCD(1,65535) == 1 );
+        REQUIRE( PGCD(0,480) == 480 );
+        REQUIRE( PGCD(0,42) == 42 );
+    }
+    SECTION("A = B"){
+        REQUIRE( PGCD(65535,65535) == 65535 );
+        REQUIRE( PGCD(0,0) == 0 );
+    }
+}    
+\end{lstlisting}        
+        Dans le cas où des erreurs sont détéctées, l'affichage est le suivant :
+        
+        \todo[inline]{Mettre image Test failed}
+
+        Dans le cas contraire, on retrouvera l'affichage suivant:
+        \todo[inline]{Mettre image Test sucess}
+
+        Cepandant, si une erreur ce produit dans une section, cette dernière est abandonée pour passé à la suivante.
+        Si d'autre erreurs sont présentes sur d'autre cas de la section, elles ne seront pas visible. Nous n'obtenons pas un rapport total des tests.
 \section{Hardware}
     \subsection{Etape 1}
     \subsection{Etape 2}
