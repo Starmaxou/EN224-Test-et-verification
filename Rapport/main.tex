@@ -63,12 +63,14 @@
    morekeywords=[1]{
      library,use,all,entity,is,port,in,out,end,architecture,of,
      begin,and, process, if, else, elsif, PROCESS, LIBRARY, USE, ALL, ENTITY, 
-     IS, PORT, IN, OUT, END, ARCHITECTURE, OF, BEGIN, AND, ASSERT, wait, while, SEVERITY
+     IS, PORT, IN, OUT, END, ARCHITECTURE, OF, BEGIN, AND, ASSERT, assert,
+     wait, while, SEVERITY, severity, report
    },
    morekeywords=[2]{
      STD_LOGIC_VECTOR,STD_LOGIC,IEEE,STD_LOGIC_1164,
      NUMERIC_STD,STD_LOGIC_ARITH,STD_LOGIC_UNSIGNED,std_logic_vector,
-     std_logic, downto, DOWNTO, UNSIGNED, TO_UNSIGNED, to_unsigned, ERROR
+     std_logic, downto, DOWNTO, UNSIGNED, unsigned, TO_UNSIGNED, to_unsigned, to_integer,
+     ERROR, error
    },
    morecomment=[l]--
 }
@@ -88,7 +90,8 @@
     basicstyle = \footnotesize,
     keywordstyle = [1]\color{keyword}\bfseries,
     keywordstyle = [2]\color{STD}\bfseries,
-    commentstyle = \color{comment}
+    commentstyle = \color{comment},
+    backgroundcolor=\color{backgroundColour}
 }
 
 
@@ -107,7 +110,7 @@
 \newpage %-------Saut de Page---------
 
 \section{Introduction}
-    Ce TP à pour but de découvrir différentes méthodes de test et vérification dans le développement de composants logiciels et matériels.
+    Ce TP a pour but de découvrir différentes méthodes de test et vérification dans le développement de composants logiciels et matériels.
 \section{Software}
     \subsection{Etape 1}
         L'implémentation de la fonction PGCD fût une simple traduction de l'algorithme présenté en langage C.
@@ -125,7 +128,8 @@ int PGCD(int A, int B)
 }
  \end{lstlisting}
         
-        Cependant il est important de resté concentré, car même si l'algorithme est trivial, une étourderie est vite arrivé et peut faire perdre du temps inutilement.
+        Cependant il est important de rester concentré, car même si l'algorithme est trivial, 
+        une étourderie est vite arrivé et peut faire perdre du temps inutilement.
         \\
         
         Le test de la fonction est effectué au moyen de couples de valeurs d'on aura préalablement calculé le PGCD. 
@@ -141,11 +145,12 @@ printf("PGCD(6272,458) = %d\n",PGCD(6272,458));
 printf("PGCD(783,125) = %d\n",PGCD(783,125));
 printf("PGCD(125,783) = %d\n",PGCD(125,783));
 \end{lstlisting}
-        Il faut ensuite comparé manuellement les résultats aux calculs.
+        Il faut ensuite comparer manuellement les résultats aux calculs.
         
         
     \subsection{Etape 2}
-        Afin de pouvoir test plus de valeurs sans avoir à dupliquer les lignes de tests, nous ajoutons une génération aléatoires des valeurs de A et B comprisent entre 0 et 65535.
+        Afin de pouvoir test plus de valeurs sans avoir à dupliquer les lignes de tests, 
+        nous ajoutons une génération aléatoire des valeurs de A et B comprises entre 0 et 65535.
         
 \begin{lstlisting}[style=CStyle]
 #define MAX_RAND 65535
@@ -161,7 +166,7 @@ int RandB(void){
     return B;
 }
 \end{lstlisting}
-        En ajoutant une boncle FOR dans le main, on peut ainsi test beaucoup plus de valeurs.
+        En ajoutant une boucle FOR dans le main, on peut ainsi test beaucoup plus de valeurs.
 \begin{lstlisting}[style=CStyle]
 for(int i = 0 ; i < 200000 ; i++){
 	A = RandA();
@@ -171,7 +176,7 @@ for(int i = 0 ; i < 200000 ; i++){
 \end{lstlisting}
         
         \newpage
-        Avec l'ajout de cette fonctionnalité, j'ai pu remarqué que la fonction PGCD ne prenait pas en compte les cas où $A = 0$ ou $B = 0$.
+        Avec l'ajout de cette fonctionnalité, j'ai pu remarquer que la fonction PGCD ne prenait pas en compte les cas où $A = 0$ ou $B = 0$.
         Conformément à l'annexe du sujet, la fonction PGCD devient alors :
 \begin{lstlisting}[style=CStyle]
 int PGCD(int A, int B)
@@ -188,14 +193,15 @@ int PGCD(int A, int B)
 	return A;
 }
 \end{lstlisting}
-        La vérification des résultats de la fonction PGCD est possible mais beaucoup trop long car il est nécessaire de comparer manuellement les résultats avec les calculs préalablement effectués.
+        La vérification des résultats de la fonction PGCD est possible mais beaucoup trop longue car 
+        il est nécessaire de comparer manuellement les résultats avec les calculs préalablement effectués.
     
     \subsection{Etape 3}
-        Afin de tester plus de couple d'entrée, il peut être interressant de comparer ma fonction PGCD avec une autre déjà éprouver.
+        Afin de tester plus de couple d'entrée, il peut être intéressant de comparer ma fonction PGCD avec une autre déjà éprouvée.
         La nouvelle approche est la suivante :
         \begin{itemize}
-            \item Assignez à $N_1$ la valeur de $N_2$ et à $N_2$ la valeur du reste de la division de $N_1$ par $N_2$;
-            \item Recommencez jusqu'à ce que le reste de la division soit nul;
+            \item Assignez à $N_1$ la valeur de $N_2$ et à $N_2$ la valeur du reste de la division de $N_1$ par $N_2$,
+            \item Recommencez jusqu'à ce que le reste de la division soit nul,
             \item A ce moment, $N_1$ contient alors le PGCD de $N_1$ et $N_2$.
         \end{itemize}
         
@@ -223,7 +229,7 @@ for(i = 0 ; i < 65536 ; i++){
 	printf("%d\t%d\t%d\t%d\t%d\n", i, A, B,PGCD1(A, B), test);
 }
 \end{lstlisting}
-        Cette méthode nous permet de comparer les résultats de deux fonction effectuant la même opération mais avec des approches différentes. Seulement si les deux fonctions ont des résultats identiquement faux pour des couples de valeurs, le test sera positif au lieu d'indiquer une erreur de calcul.
+        Cette méthode nous permet de comparer les résultats de deux fonctions effectuant la même opération mais avec des approches différentes. Seulement si les deux fonctions ont des résultats identiquement faux pour des couples de valeurs, le test sera positif au lieu d'indiquer une erreur de calcul.
     \newpage
     \subsection{Etape 4}
         La vérification des résultats peut commencer en assurant une cohérence entre les valeurs d'entrée et de sortie de la fonction PGCD. Cela est réalisé par des assertions.
@@ -250,8 +256,8 @@ int PGCD(int A, int B)
          
          Les pré-conditions ont pour objectif de détecter au plus tôt les erreurs, 
          afin d’alerter le concepteur en stoppant l’exécution du programme. 
-         Elles n'empêche pas l'erreur de ce produire mais permettent d'éviter le déroulement 
-         du programme dans des conditions connues comme mauvaise.
+         Elles n'empêchent pas l'erreur de se produire mais permettent d'éviter le déroulement 
+         du programme dans des conditions connues comme mauvaises.
 
          On notera également que les assertions ne servent que pour le développement. Lors de la compilation de la version finale du programme, il faut désactiver les assertions.
 \begin{lstlisting}[style=CStyle]
@@ -260,7 +266,7 @@ int PGCD(int A, int B)
 \end{lstlisting}
 
     \subsection{Etape 5}
-        En plus de vérifier si les données fournis à la fonction sont conforme, on va vérifier que le résultat est cohérent.
+        En plus de vérifier si les données fournis à la fonction sont conformes, on va vérifier que le résultat est cohérent.
         \begin{itemize}
             \item La valeur de sortie ne peut pas être plus grande qu'une des valeurs d'entrée,
             \item Si $A \neq 0$ et $B \neq 0$, la valeur à la sortie de la boucle WHILE ne peut pas être également à 0.
@@ -291,8 +297,8 @@ int PGCD(int A, int B)
 \end{lstlisting}
 
         Les post-condition fonctionnement de la même manière que les pré-conditions.
-        Elles permettent de vérifier que le résultat de la fonction est mathatiquement cohérent avec ses entrées.
-        Elles ne permettant pas de valider le fonctionnement de la fonction mais de détécter des cas d'erreurs connus.
+        Elles permettent de vérifier que le résultat de la fonction est mathématiquement cohérent avec ses entrées.
+        Elles ne permettant pas de valider le fonctionnement de la fonction mais de détecter des cas d'erreurs connus.
     \subsection{Etape 6}
        Dans cette partie, nous séparons la fonction PGCD dans un fichier spécifique.
        Le nouveau fichier PGCD.c contient donc le code suivant :
@@ -352,13 +358,13 @@ int main (int argc, char * argv []){
 }
 \end{lstlisting}
 
-        Les tests unitaires permettent de vérifié le fonctionnement d'une fonctionnalité pendant sont développement. 
+        Les tests unitaires permettent de vérifier le fonctionnement d'une fonctionnalité pendant son développement. 
         Ainsi on vérifie si les modifications que l'on apporte nous pas créer de bug.
         On parlera alors de test de non-régression.
 \newpage
     \subsection{Etape 7}
-        Il existe de framework permettant de simplifer la rédaction des procédure de test et l'analyse des résultats.
-        Dans cette exercice, le framework Catch2 va permettre d'exprimer des séquences de tests.
+        Il existe de framework permettant de simplifier la rédaction des procédures de test et l'analyse des résultats.
+        Dans cet exercice, le framework Catch2 va permettre d'exprimer des séquences de tests.
 \begin{lstlisting}[style=CStyle]
 #include "pgcd.hpp"
 #define CATCH_CONFIG_MAIN
@@ -404,7 +410,7 @@ TEST_CASE ( "Fonctionnement autre", "[PGCD]"){
     }
 }    
 \end{lstlisting}        
-        Dans le cas où des erreurs sont détéctées, l'affichage est le suivant :
+        Dans le cas où des erreurs sont détectées, l'affichage est le suivant :
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.6]{Pictures/test_failed.jpg}
@@ -412,7 +418,7 @@ TEST_CASE ( "Fonctionnement autre", "[PGCD]"){
             \label{fig:Test_failed}
         \end{figure}
 
-        Dans le cas contraire, on retrouvera l'affichage suivant:
+        Dans le cas contraire, on retrouvera l'affichage suivant :
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.6]{Pictures/test_passed.jpg}
@@ -420,12 +426,12 @@ TEST_CASE ( "Fonctionnement autre", "[PGCD]"){
             \label{fig:Test_success}
         \end{figure}
 
-        Cepandant, si une erreur ce produit dans une section, cette dernière est abandonée pour passé à la suivante.
-        Si d'autre erreurs sont présentes sur d'autre cas de la section, elles ne seront pas visible. Nous n'obtenons pas un rapport total des tests.
+        Cependant, si une erreur ce produit dans une section, cette dernière est abandonnée pour passer à la suivante.
+        Si d'autre erreurs sont présentes sur d'autre cas de la section, elles ne seront pas visibles. Nous n'obtenons pas un rapport total des tests.
 
 \section{Hardware}
     \subsection{Etape 1}
-        De même que pour l'étape 1 de la partie sotfware, il faut décrire un module VHDL permetant d'implanter le calcul du PGCD de deux nombres.
+        De même que pour l'étape 1 de la partie software, il faut décrire un module VHDL permettant d'implanter le calcul du PGCD de deux nombres.
         Le module aura le prototype suivant :
 
 \begin{lstlisting}[style=VHDL]
@@ -450,21 +456,28 @@ END PGCD;
     \caption{Machine etat module PGCD}
     \label{fig:FSM_PGCD}
 \end{figure}
-        La description de cette machine nécéssite 4 process:
+
+\newpage
+        La description de cette machine nécessite 4 process :
         \begin{itemize}
             \item Mise à jour synchrone de l'état
-            \item Calcul de nouvelle état en fonction des entrées
+            \item Calcul du nouvel état en fonction des entrées
             \item Calcul des sorties en fonction de l'état en cours
-            \item Cacule du PGCD
+            \item Calcul du PGCD
         \end{itemize}
         
         Après avoir décrit le module il faut créer un testbench afin de tester le fonctionnement du module.
         Il existe des outils permettant de décrire automatiquement le squelette d'un testbench pour un module VHDL.
-        Une fois ce squelette décrit, il ne reste plus qu'a créer les stimulis pour le module à tester.
+        Une fois ce squelette décrit, il ne reste plus qu'à créer les stimuli pour le module à tester.
 
     \subsection{Etape 2}
         De la même manière que pour la partie software, il est possible d'utiliser des assertions afin de vérifier le fonctionnement du module.
-        Ces assertions seront écrite dans le fichier testbench.
+\begin{lstlisting}[style=VHDL]
+assert to_integer(unsigned(idata_a)) < 65535 report "Entree A trop grande" severity error;
+assert to_integer(unsigned(idata_b)) < 65535 report "Entree B trop grande" severity error;
+\end{lstlisting}
+        Si ces assertions ne sont pas valide, un message d'erreur sera indiqué dans la console, de la même manière que pour la partie software. 
+        Dans ce code VHDL on rajoutera la notion de severité permettant de hiérachisé les messages générés par les assertions.
     \subsection{Etape 3}
         Afin d'automatiser l'écriture des valeurs de test, il est possible de modifier nos précédents fichiers C pour générer des valeurs de test calculées avec notre fichier PGCD.c.
 \begin{lstlisting}[style=CStyle]
@@ -507,14 +520,16 @@ while odata_en = '0' loop
 end loop;
 ASSERT UNSIGNED(odata) = TO_UNSIGNED( 1, 32) SEVERITY ERROR;
 \end{lstlisting}
-        Avec cette méthode, on peut générer autant de test que l'on souhaite et donc gagner énormement de temps.
-        Cependant, pour utiliser cette méthode il faut être sûre du bon fonctionnement de la fonction réalisant les pgcds des couples de tests.
+        Avec cette méthode, on peut générer autant de test que l'on souhaite et donc gagner énormément de temps.
+        Cependant, pour utiliser cette méthode il faut être sûre du bon fonctionnement de la fonction réalisant les PGCD des couples de tests.
 
 \section{Conclusion} % Conclusion
-Tout le code du TP est disponible dans mon repository GIT https://github.com/Starmaxou/EN224-Test-et-verification
-\begin{lstlisting}[style=CStyle]
+    Ce TP m'a permit de découvrir différentes méthodes de tests, ainsi que différents outils permettant de vérifier le fonctionement de module logiciel et matériel.
+    Les méthodes vues lors de ce cours seront à appliquer mes futurs proches de développement qu'ils soient réaliser à l'école ou dans le cadre de mon alternance.
+
+    Tout le code que j'ai réalisé lors de ce TP est disponible dans mon repository github.
     
-\end{lstlisting}
+    https://github.com/Starmaxou/EN224-Test-et-verification
 
 \newpage %-------Saut de Page---------
 \listoftodos
