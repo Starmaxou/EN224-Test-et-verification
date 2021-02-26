@@ -4,7 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
 \usepackage[titletoc,title]{appendix}
-
+\usepackage[french]{babel}
 % Math
 % https://www.overleaf.com/learn/latex/Mathematical_expressions
 % https://en.wikibooks.org/wiki/LaTeX/Mathematics
@@ -94,12 +94,13 @@
     backgroundcolor=\color{backgroundColour}
 }
 
+\addto\captionsfrench{\renewcommand{\contentsname}{Sommaire}}
 
 % Title content
 \title{EN224 - Test et vérification}
 
 \author{ALBERTY Maxime}
-\date{9 février 2021}
+\date{26 février 2021}
 
 \begin{document}
 
@@ -524,14 +525,11 @@ ASSERT UNSIGNED(odata) = TO_UNSIGNED( 1, 32) SEVERITY ERROR;
         Cependant, pour utiliser cette méthode il faut être sûre du bon fonctionnement de la fonction réalisant les PGCD des couples de tests.
 
 \section{Conclusion} % Conclusion
-    Ce TP m'a permit de découvrir différentes méthodes de tests, ainsi que différents outils permettant de vérifier le fonctionement de module logiciel et matériel.
+    Ce TP m'a permit de découvrir différentes méthodes de tests, ainsi que différents outils permettant de vérifier le fonctionement d'un module logiciel et matériel.
     Les méthodes vues lors de ce cours seront à appliquer mes futurs proches de développement qu'ils soient réaliser à l'école ou dans le cadre de mon alternance.
 
     Tout le code que j'ai réalisé lors de ce TP est disponible dans mon repository github.
     
     https://github.com/Starmaxou/EN224-Test-et-verification
-
-\newpage %-------Saut de Page---------
-\listoftodos
 
 \end{document}
